@@ -6,4 +6,5 @@ DIRNAME=$(readlink "$0")
 DIRNAME=$(dirname "$DIRNAME")
 cd "$DIRNAME"
 
+poetry install -q
 poetry run gptcli $CUR_DIR $@

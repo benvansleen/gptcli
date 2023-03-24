@@ -3,6 +3,10 @@
 Tired of forgetting basic cli commands and esoteric flags? Never again!
 
 
+## Dependencies
+`gptcli` requires a relatively recent version of `poetry` (the python project manager).
+
+
 ## Installation
 
 ```shell
