@@ -1,4 +1,9 @@
+import os
+import sys
+import openai
 from openai import ChatCompletion
+from dotenv import load_dotenv
+from gptcli import console
 
 
 SYSTEM_PROMPT = '''
@@ -41,3 +46,21 @@ def gpt(prompt: Prompt):
         messages=prompt.prompt,
         temperature=0.2,
     )['choices'][0]['message']['content']
+
+
+def set_key():
+    load_dotenv()
+    key = os.getenv('OPENAI_API_KEY')
+    if key:
+        openai.api_key = key
+    else:
+        console.print(
+            '''
+            [red]No API key found.
+            Please set the OPENAI_API_KEY environment variable or create a .env file in the project's root directory.
+            Example:
+            in `gptcli/.env`:
+            OPENAI_API_KEY = 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+            '''
+        )
+        sys.exit(1)

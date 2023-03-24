@@ -42,4 +42,4 @@ def prompt_loop(wd, llm, prompt):
             console.print("[bold green]Let's see if I can figure it out...")
             prompt_loop(wd, llm, prompt)
         else:
-            console.print(f'[bold]{stdout}')
+            console.print(stdout)
