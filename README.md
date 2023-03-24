@@ -1,4 +1,4 @@
-# GPTCLI
+# gptCLI
 
 Tired of forgetting basic cli commands and esoteric flags? Never again!
 
