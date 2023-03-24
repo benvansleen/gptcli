@@ -70,7 +70,6 @@ def gpt(prompt: Prompt):
     if cached:
         return cached
     else:
-        print('Not in cache!')
         response = ChatCompletion.create(
             model='gpt-3.5-turbo',
             messages=prompt.prompt,
