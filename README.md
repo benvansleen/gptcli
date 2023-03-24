@@ -11,3 +11,9 @@ cd gptcli
 echo "OPENAI_API_KEY=[your token here]" > .env
 ln -s ./run ~/.local/bin/gptcli
 ```
+
+## Usage
+
+```shell
+gptcli stage all local changes to be committed
+```
