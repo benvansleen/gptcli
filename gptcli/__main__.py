@@ -1,5 +1,5 @@
 import openai
-from sys import argv
+from sys import argv, exit
 from .interface import prompt_loop
 from .gpt import gpt, Prompt, set_key
 
@@ -13,8 +13,11 @@ def start_query():
 
 
 def main():
-    set_key()
-    start_query()
+    try:
+        set_key()
+        start_query()
+    except KeyboardInterrupt:
+        exit(0)
 
 
 if __name__ == '__main__':
