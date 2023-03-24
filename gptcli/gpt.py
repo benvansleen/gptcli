@@ -4,7 +4,7 @@ import openai
 from openai import ChatCompletion
 from dotenv import load_dotenv
 from gptcli import console
-from .cache import check_cache, cache
+from .cache import cached
 
 
 SYSTEM_PROMPT = '''
@@ -65,18 +65,13 @@ class Prompt:
         ''')
 
 
+@cached
 def gpt(prompt: Prompt):
-    cached = check_cache(prompt.prompt)
-    if cached:
-        return cached
-    else:
-        response = ChatCompletion.create(
-            model='gpt-3.5-turbo',
-            messages=prompt.prompt,
-            temperature=0.2,
-        )['choices'][0]['message']['content']
-        cache(prompt.prompt, response)
-        return response
+    return ChatCompletion.create(
+        model='gpt-3.5-turbo',
+        messages=prompt.prompt,
+        temperature=0.2,
+    )['choices'][0]['message']['content']
 
 
 def set_key():

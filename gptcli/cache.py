@@ -49,3 +49,15 @@ def cache(prompt, response):
     with open(CACHE_FILE, 'w') as f:
         json.dump(cur_cache, f)
     return
+
+
+def cached(func):
+    def wrapper(prompt):
+        cached = check_cache(prompt.prompt)
+        if cached:
+            return cached
+        else:
+            res = func(prompt)
+            cache(prompt.prompt, res)
+            return res
+    return wrapper
