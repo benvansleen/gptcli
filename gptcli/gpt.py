@@ -4,6 +4,7 @@ import openai
 from openai import ChatCompletion
 from dotenv import load_dotenv
 from gptcli import console
+from .cache import check_cache, cache
 
 
 SYSTEM_PROMPT = '''
@@ -20,6 +21,7 @@ Response:
 
 class Prompt:
     def __init__(self):
+        self.n_json_errors = 0
         self.prompt = [
             {
                 'role': 'system',
@@ -39,13 +41,43 @@ class Prompt:
             'content': response,
         })
 
+    def json_error(self):
+        self.query('''
+        Follow the appropriate JSON formatting!
+        Example:
+        User: Check for uncommitted changes in this repo
+        Response:
+        {
+            "command": "git status",
+            "explanation": "git status shows the status of the current git repo"
+        }
+        ''')
+        self.n_json_errors += 1
+        return self.n_json_errors
+
+    def debug(self, stdout, stderr):
+        self.query(f'''
+        That command failed with this on stdout:
+        {stdout}
+        And this on stderr:
+        {stderr}
+        Provide a new command to fix this error.
+        ''')
+
 
 def gpt(prompt: Prompt):
-    return ChatCompletion.create(
-        model='gpt-3.5-turbo',
-        messages=prompt.prompt,
-        temperature=0.2,
-    )['choices'][0]['message']['content']
+    cached = check_cache(prompt.prompt)
+    if cached:
+        return cached
+    else:
+        print('Not in cache!')
+        response = ChatCompletion.create(
+            model='gpt-3.5-turbo',
+            messages=prompt.prompt,
+            temperature=0.2,
+        )['choices'][0]['message']['content']
+        cache(prompt.prompt, response)
+        return response
 
 
 def set_key():
